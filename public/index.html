@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaperLens - 论文摘要与问答</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>📄 PaperLens</h1>
+    <p class="subtitle">粘贴论文文本或上传 PDF，获取中文摘要与基于论文内容的问答</p>
+  </header>
+
+  <!-- 模型未配置提示（默认隐藏，由 JS 检查后端状态后显示） -->
+  <div id="config-warning" class="banner warning hidden">
+    <strong>⚠️ 模型服务尚未配置</strong><br>
+    当前无法生成 AI 摘要和回答。请按 README 第 4 步：复制 <code>.env.example</code> 为
+    <code>.env</code>，填入你的 API Key，然后重启服务。你仍然可以先粘贴文本或上传 PDF 查看提取效果。
+  </div>
+
+  <div class="banner info">
+    <strong>🔔 提醒：</strong>AI 输出可能不准确，请务必核对论文原文。证据不足时，系统会明确说明，不会编造。
+  </div>
+
+  <main>
+    <!-- 第一步：输入论文 -->
+    <section class="card">
+      <h2>第一步：提供论文内容</h2>
+      <p class="hint">两种方式任选其一。粘贴文本方式可以独立工作，不依赖 PDF 解析。</p>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="paste">✏️ 粘贴论文文本</button>
+        <button class="tab" data-tab="pdf">📎 上传 PDF</button>
+      </div>
+
+      <div id="tab-paste" class="tab-panel">
+        <textarea id="paper-text" rows="12"
+          placeholder="在这里粘贴论文全文或主要章节（支持从 PDF 里复制的文字）…"></textarea>
+        <div class="row">
+          <button id="btn-demo" class="secondary">填入演示文本（示例）</button>
+          <span class="char-count" id="char-count">0 字</span>
+        </div>
+      </div>
+
+      <div id="tab-pdf" class="tab-panel hidden">
+        <input type="file" id="pdf-file" accept="application/pdf">
+        <p class="hint">支持文字型 PDF（可复制文字的那种）。扫描版、加密或损坏的 PDF 无法读取，会提示你改用粘贴文本。</p>
+        <div id="pdf-result" class="hidden"></div>
+      </div>
+    </section>
+
+    <!-- 第二步：摘要 -->
+    <section class="card">
+      <h2>第二步：生成四部分摘要</h2>
+      <button id="btn-summary" class="primary">生成摘要</button>
+      <div id="summary-status" class="status"></div>
+      <div id="summary-output" class="hidden">
+        <div class="summary-block"><h3>研究问题</h3><p id="s-question"></p></div>
+        <div class="summary-block"><h3>研究方法</h3><p id="s-method"></p></div>
+        <div class="summary-block"><h3>主要结果</h3><p id="s-result"></p></div>
+        <div class="summary-block"><h3>局限性</h3><p id="s-limitation"></p></div>
+      </div>
+      <pre id="summary-raw" class="raw hidden"></pre>
+    </section>
+
+    <!-- 第三步：问答 -->
+    <section class="card">
+      <h2>第三步：针对论文提问</h2>
+      <p class="hint">回答只根据你提供的论文内容生成；没有依据时会明确说明。</p>
+      <div class="row">
+        <input type="text" id="question-input"
+          placeholder="例如：这篇论文的样本量是多少？作者用了什么数据集？">
+        <button id="btn-ask" class="primary">提问</button>
+      </div>
+      <div id="qa-list"></div>
+    </section>
+
+    <footer>
+      <p>PaperLens 原型 · 论文内容仅在你自己的电脑和所配置的模型服务之间传输，本项目不保存、不上传到其他地方。</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

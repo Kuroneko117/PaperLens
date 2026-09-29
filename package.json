@@ -1,0 +1,15 @@
+{
+  "name": "paperlens",
+  "version": "1.0.0",
+  "description": "PaperLens - 中文论文摘要与问答网页原型",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "multer": "^2.0.1",
+    "pdfjs-dist": "^4.10.38"
+  }
+}
